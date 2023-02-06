@@ -11,6 +11,9 @@ def home():
     return "Flask says 'Hello world!'"
 
 
+@app.route('/crash')
+def crash():
+    return 1/0
 
 
 @app.route('/db')
@@ -28,3 +31,6 @@ def db_connection():
 @app.route('/lab04')
 def lab04_bootstrap():
     return app.send_static_file('lab04_bootstrap.html')
+
+
+
