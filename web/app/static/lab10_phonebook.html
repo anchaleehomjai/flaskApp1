@@ -119,6 +119,7 @@
       $.post(url, formData, function (contact_data) {
         refresh_table(contact_data);
         clearForm();
+        toggleView()
       });
     });
 
@@ -155,7 +156,7 @@
       $('#lastname').val(row.lastname)
       $('#phone').val(row.phone)
       $('#entryid').val(row.id)
-
+      toggleView()
     }
     function removeItem(row) {
       if (!confirm("Delete " + row.firstname + ' ' + row.lastname + '?')) {
@@ -176,7 +177,6 @@
         $('#contact_display').attr('hidden', 'hidden');
         $('#add-edit').removeAttr('hidden');
       }
-      $("#addPhoneNumberForm").submit()
     }
 
 
