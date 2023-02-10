@@ -26,9 +26,9 @@ def db_connection():
         return '<h1>db is broken.</h1>' + str(e)
 
 
-@app.route('/lab04')
+@app.route('/lab11')
 def lab04_bootstrap():
-    return app.send_static_file('lab04_bootstrap.html')
+    return app.send_static_file('lab11_microblog.html')
 
 @app.route("/lab10")
 def lab10():
