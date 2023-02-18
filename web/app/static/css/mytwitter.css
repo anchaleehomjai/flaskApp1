@@ -2,7 +2,7 @@ body {
     background-color: #e7ecf0;
 }
 nav {
-    background-color: #ffffff;
+    background-color: #82cff6;
     border-bottom: 1px solid #adb1b4;
     margin-bottom: 10px;
 }
@@ -16,20 +16,30 @@ img.tw-user-medium {
  
 #nav-search {
     border-radius: 20px;
-    background-color: #e7ecf0
+    background-color: #ffffff
 }
- 
+input[type=submit],
 #nav-tweet-btn {
+    margin-top: 10px;
+    margin-left: 50px;
     border-radius: 20px;
-    background-color: #67b1f9;
+    background-color: #14649d;
     color: #ffffff;
+}
+input[type=submit], input[type=reset], button {
+    margin-bottom: 11px;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
 }
 .content-box {
     background-color: #ffffff;
-    margin-bottom 10px;
+    margin-bottom: 10px;
 }
 .new-tweet-row {
-    background-color: #eaf5fe;
+    background-color: #ffffff;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -39,7 +49,7 @@ img.tw-user-medium {
     padding-bottom: 10px;
     border-bottom: 1px solid #edf1f4;
 }
- 
+
 .tweet-username {
     font-weight: bold;
 }
@@ -50,7 +60,7 @@ img.tw-user-medium {
  
 .tweet-text,
 .tweet-media {
+    margin-top: 10px;
+    margin-block-end: 10px;
     padding-right: 10px;
 }
-
-

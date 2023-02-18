@@ -5,6 +5,10 @@ from sqlalchemy.sql import text
 from app import app
 from app import db
 from app.models.contact import Contact
+from app.models.blogentry import BlogEntry
+
+
+
 
 @app.route('/')
 def home():
@@ -30,6 +34,8 @@ def db_connection():
 def lab04_bootstrap():
     return app.send_static_file('lab11_microblog.html')
 
+
+
 @app.route("/lab10")
 def lab10():
     return app.send_static_file('lab10_phonebook.html')
@@ -46,6 +52,19 @@ def lab10_db_contacts():
 
     return jsonify(contacts)
 
+@app.route("/lab11/blogEntry")
+def blog_entries():
+    blogEntry = []
+    db_blogEntry = BlogEntry.query.all()
+
+
+    blogEntry = list(map(lambda x: x.to_dict(), db_blogEntry))
+    blogEntry.sort(key = lambda x:x['id'])
+    app.logger.debug("DB BlogEntry: " + str(blogEntry))
+
+
+    return jsonify(blogEntry)
+
 
 @app.route('/lab10', methods=('GET', 'POST'))
 def lab10_phonebook():
@@ -55,7 +74,7 @@ def lab10_phonebook():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['firstname', 'lastname', 'phone']
+        valid_keys = ['name', 'email', 'messege']
 
 
         # validate the input
@@ -92,6 +111,52 @@ def lab10_phonebook():
         return lab10_db_contacts()
     return app.send_static_file('lab10_phonebook.html')
 
+@app.route('/lab11', methods=('GET', 'POST'))
+def lab10_blogEntry():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        id_ = result.get('id', '')
+        validated = True
+        validated_dict = dict()
+        valid_keys = ['name', 'message', 'email']
+
+
+        # validate the input
+        for key in result:
+            app.logger.debug(key, result[key])
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+
+
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            # if there is no id: create a new contact entry
+            if not id_:
+                entry = BlogEntry(**validated_dict)
+                app.logger.debug(str(entry))
+                db.session.add(entry)
+            # if there is an id already: update the contact entry
+            else:
+                contact = BlogEntry.query.get(id_)
+                contact.update(**validated_dict)
+
+
+            db.session.commit()
+
+
+        return blog_entries()
+    return app.send_static_file('lab11_microblog.html')
+
+
 @app.route('/lab10/remove_contact', methods=('GET', 'POST'))
 def lab10_remove_contacts():
     app.logger.debug("LAB10 - REMOVE")
@@ -106,3 +171,19 @@ def lab10_remove_contacts():
             app.logger.debug(ex)
             raise
     return lab10_db_contacts()
+
+
+@app.route('/lab11/remove_contact', methods=('GET', 'POST'))
+def lab11_remove_contacts():
+    app.logger.debug("LAB11 - REMOVE")
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        id_ = result.get('id', '')
+        try:
+            contact = BlogEntry.query.get(id_)
+            db.session.delete(contact)
+            db.session.commit()
+        except Exception as ex:
+            app.logger.debug(ex)
+            raise
+    return blog_entries()
