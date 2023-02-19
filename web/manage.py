@@ -25,6 +25,7 @@ def create_db():
 def seed_db():
     db.session.add(
         Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111'))
+    db.session.commit()
     db.session.add(
         BlogEntry(name='สมหมาย',message='สวัสดีค่ะฉันสมศรี',email='sumsri@gmail.com') )
     db.session.commit()

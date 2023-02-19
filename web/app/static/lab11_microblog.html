@@ -53,15 +53,15 @@
               <div class="col-md-9">
                 <form id="tweet">
 
-                  <input id="tweet-input" class="form-control" type="text" name="name"
-                    placeholder="Whats is your name?">
-                  <input id="mail" class="form-control" type="email" name="email" placeholder="Email?">
-                  <input id="tweet-input" class="form-control" type="text" name="message"
-                    placeholder="Whats happening?">
+                  <input id="name" class="form-control" type="text" name="name" placeholder="Whats is your name?">
+                  <input id="email" class="form-control" type="email" name="email" placeholder="Email?">
+                  <input id="message" class="form-control" type="text" name="message" placeholder="Whats happening?">
+                  <input type="hidden" id="entryid" name="id" value="">
+
                   <input type="submit" id="nav-tweet-btn" name="submit" value="Tweet">
 
                   <!-- <button class="btn" id="nav-tweet-btn" type="submit">Tweet</button> -->
-                  <button class="btn" id="nav-tweet-btn" type="button">Clear</button>
+                  <button class="btn" id="nav-tweet-btn" type="button" onclick="clearForm()">Clear</button>
                   <button class="btn" id="nav-tweet-btn" type="button">Cancel</button>
 
 
@@ -96,6 +96,8 @@
                   <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
                   <div class="col-md-2"><span class="oi oi-heart"></span></div>
                   <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
+
+
                 </div>
               </div>
             </div>
@@ -121,14 +123,21 @@
     // const db_date = new(Date.parse())
 
 
-    const Createblog = ({ email, id, message, name, date_created }) => {
-      const timeT = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString();
-      const time = timeT.slice(0, 19).replace("T", " ");
-      const action = actionFormatter(email, id, message, name, date_created)
-      // var date = new Date();
-      // var offset = date.getTimezoneOffset()
-      // const db_date = new((Date.parse(date_created)- (offset*60*100))).toLocaleString("en-GB")
-
+    const Createblog = ({ email, id, message, name, date_created, date_update }) => {
+      let time = '';
+      
+        let timeCre= new Date(date_created + " UTC").toLocaleString("en-GB")
+      
+        let timeUp = new Date(date_update + " UTC").toLocaleString("en-GB")
+        if(timeCre != timeUp){
+          time = timeUp
+        }else{
+          time = timeCre
+        }
+        
+        
+      
+  
       return `
     <div class="tweet">
             <div class="row">
@@ -139,17 +148,15 @@
               <div class="col-md-10">
                 <div class="row tweet-info">
                   <div class="col-md-auto">
-                    <span class="tweet-username">${name}</span>
-                    <span class="tweet-usertag text-muted">@${email}</span>-
-                    <span class="tweet-age text-muted">${timeT }</span>
+                    <span class="tweet-username" id="${id}name">${name}</span>
+                    <span class="tweet-usertag text-muted" id="${id}email">${email}</span>-
+                    <span class="tweet-age text-muted">${time}</span>
                   </div>
                   <div class="col tweet-arrow text-muted">
-                    <span ${action}</span>
-
+                    <button type="button" class="bi bi-pencil-square float-right" value = "${id}" onclick="prePopulateForm(this.value)"></button>
                   </div>
                 </div>
-                
-                <div class="tweet-text">
+                <div class="tweet-text" id ="${id}message">
                   ${message}
                 </div>
                 <div class="row text-muted">
@@ -157,10 +164,15 @@
                   <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
                   <div class="col-md-2"><span class="oi oi-heart"></span></div>
                   <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
+                  <button type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>
+                  
+
+
                 </div>
               </div>
             </div>
-          </div>`
+          </div>
+     `
     }
 
     let blog = data.data.map(Createblog);
@@ -224,44 +236,31 @@
     $('#entryid').val('');
   }
 
-  function actionFormatter(email, id, message, name, date_created) {
-      return [
-        '<a class="edit" href="javascript:void(0)" title="Like">',
-        '✏️',
-        '</a>  ',
-        '<a class="remove" href="javascript:void(0)" title="Remove">',
-        '🗑️',
-        '</a>'
-      ].join('')
-      
-    }
-    window.operateEvents = {
-      'click .edit': function (email, id, message, name, date_created) {
-        prePopulateForm(row);
-      },
-      'click .remove': function (email, id, message, name, date_created) {
-        removeItem(row);
-      }
-    }
 
-    function prePopulateForm(row) {
-      $('#tweet')[0].reset();
-      $('#firstname').val(row.firstname)
-      $('#lastname').val(row.lastname)
-      $('#phone').val(row.phone)
-      $('#entryid').val(row.id)
-      toggleView()
+
+  function prePopulateForm(id) {
+    console.log(id);
+    console.log(document.getElementById(id + 'name').innerHTML);
+
+    $('#tweet')[0].reset();
+    $('#email').val(document.getElementById(id + "email").innerHTML);
+    $('#name').val(document.getElementById(id + 'name').innerHTML);
+    $('#message').val(document.getElementById(id + 'message').innerHTML);
+
+    $('#entryid').val(id);
+
+  }
+
+  function removeItem(id) {
+    if (!confirm("Delete " + '?')) {
+      return false;
     }
-    function removeItem(row) {
-      if (!confirm("Delete " + row.firstname + ' ' + row.lastname + '?')) {
-        return false;
-      }
-      var url = "lab11/remove_contact"
-      var formData = { 'id': row.id };
-      $.post(url, formData, function (contact_data) {
-        refresh_table(contact_data);
-      });
-    }
+    var url = "lab11/remove_contact"
+    var formData = { 'id': id };
+    $.post(url, formData, function (id) {
+      refresh_table(id);
+    });
+  }
 </script>
 
 

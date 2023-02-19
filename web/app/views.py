@@ -112,7 +112,7 @@ def lab10_phonebook():
     return app.send_static_file('lab10_phonebook.html')
 
 @app.route('/lab11', methods=('GET', 'POST'))
-def lab10_blogEntry():
+def lab11_blogEntry():
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
