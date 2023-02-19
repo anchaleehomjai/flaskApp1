@@ -92,6 +92,11 @@ input[type=submit], input[type=reset], button {
     background-color: rgb(255, 232, 21);
 }
 
-
+.oi {
+    /* Set the same height and width for all icons */
+    height: 24px;
+    width: 24px;
+    padding: 0;
+  }
 
 
