@@ -58,18 +58,18 @@
                   <input id="message" class="form-control" type="text" name="message" placeholder="Whats happening?">
                   <input type="hidden" id="entryid" name="id" value="">
 
-                  <input type="submit" id="nav-tweet-btn" name="submit" value="Tweet">
+                  <input class="btn" type="submit" id="nav-tweet-btn" name="submit" value="Tweet" style="margin-right: 20px;">
 
                   <!-- <button class="btn" id="nav-tweet-btn" type="submit">Tweet</button> -->
-                  <button class="btn" id="nav-tweet-btn" type="button" onclick="clearForm()">Clear</button>
-                  <button class="btn" id="nav-tweet-btn" type="button">Cancel</button>
+                  <button class="btn" id="nav-tweet-btn" type="button" onclick="clearForm()">Clear</button style="margin-right: 20px;">
+                 
 
 
                 </form>
               </div>
             </div>
           </div>
-          <div class="tweet">
+          <!-- <div class="tweet">
             <div class="row">
               <div class="col-md-2 text-center">
                 <img class="tw-user-medium rounded-circle" src="static/img/Png.png">
@@ -101,7 +101,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
           <div id="blog-tweet"></div>
 
         </div>
@@ -118,26 +118,12 @@
   function populate_container(contact_data) {
 
     const data = { "data": contact_data }
-    // var date = new Date();
-    // var offset = date.getTimezoneOffset()
-    // const db_date = new(Date.parse())
 
-
-    const Createblog = ({ email, id, message, name, date_created, date_update }) => {
-      let time = '';
-      
-        let timeCre= new Date(date_created + " UTC").toLocaleString("en-GB")
-      
-        let timeUp = new Date(date_update + " UTC").toLocaleString("en-GB")
-        if(timeCre != timeUp){
-          time = timeUp
-        }else{
-          time = timeCre
-        }
-        
-        
-      
-  
+    const Createblog = ({ email, id, message, name, date_created, date_updated }) => {
+      const timeCre = new Date(date_created + " UTC").toLocaleString("en-GB")
+      const timeUp = new Date(date_updated + " UTC").toLocaleString("en-GB")
+      console.log(timeUp)
+      // const db_datetime = new Date(date_updated + " UTC").toLocaleString("en-GB")
       return `
     <div class="tweet">
             <div class="row">
@@ -150,25 +136,31 @@
                   <div class="col-md-auto">
                     <span class="tweet-username" id="${id}name">${name}</span>
                     <span class="tweet-usertag text-muted" id="${id}email">${email}</span>-
-                    <span class="tweet-age text-muted">${time}</span>
+                  
                   </div>
                   <div class="col tweet-arrow text-muted">
-                    <button type="button" class="bi bi-pencil-square float-right" value = "${id}" onclick="prePopulateForm(this.value)"></button>
+                    
+                    <button type="button" class="btn btn-default btn-sm float-right" value = "${id}"  onclick="prePopulateForm(this.value),scrollToTop()" <span class="glyphicon glyphicon-pencil " ></span>edit </button>
+
                   </div>
                 </div>
-                <div class="tweet-text" id ="${id}message">
-                  ${message}
-                </div>
+                <div class="tweet-text" id ="${id}message">${message}</div>
+    
+                  <div class="tweet-info-container">
+                    <br>
+                  <p class="tweet-info"><span class="info-lab"> Time update: </span><span class="tweet-age">${timeUp}</span></p>
+                  <p class="tweet-info"><span class="info-lab">Time create: </span><span class="tweet-age">${timeCre} </span> </p>
+
+                  </div>
+                
                 <div class="row text-muted">
                   <div class="col-md-2"><span class="oi oi-bullhorn"></span></div>
                   <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
                   <div class="col-md-2"><span class="oi oi-heart"></span></div>
                   <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
-                  <button type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>
-                  
-
-
+                  <button  type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>
                 </div>
+               
               </div>
             </div>
           </div>
@@ -260,6 +252,9 @@
     $.post(url, formData, function (id) {
       refresh_table(id);
     });
+  }
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 

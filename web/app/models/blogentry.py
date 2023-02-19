@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.sql import func
 from sqlalchemy import DateTime
 from datetime import datetime
 
@@ -14,8 +15,8 @@ class BlogEntry(db.Model, SerializerMixin):
     name = db.Column(db.String(50))
     message = db.Column(db.String(280))
     email = db.Column(db.String(50))
-    date_created = db.Column(DateTime, default=datetime.utcnow) 
-    date_updated = db.Column(DateTime, onupdate=datetime.utcnow)
+    date_created = db.Column(DateTime(timezone=True), server_default=func.now())
+    date_updated = db.Column(DateTime, default=datetime.utcnow, onupdate=func.now())
 
 
     

@@ -8,10 +8,13 @@ nav {
 }
 img.tw-user-small {
     height: 40px;
+    margin-left: 50px;
+
 }
  
 img.tw-user-medium {
     height: 50px;
+    margin-left: 30px;
 }
  
 #nav-search {
@@ -64,11 +67,31 @@ input[type=submit], input[type=reset], button {
     margin-block-end: 10px;
     padding-right: 10px;
 }
-/* input[type=submit], input[type=reset], button {
-    margin-bottom: 11px;
-    padding: 0;
-    color: #c33434;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-} */
+
+  
+.tweet-username,.tweet-usertag{
+    font-size: 14px;
+}
+  
+  .tweet-info {
+    font-size: 11px;
+    margin: 0;
+  }
+  
+  /* .info-lab ,.tweet-age{
+    font-size: 11px;
+ 
+  } */
+  
+.oi-trash{
+    margin-bottom: 0px;
+}
+
+.btn-default{
+    color: rgb(19, 19, 18);
+    background-color: rgb(255, 232, 21);
+}
+
+
+
+
