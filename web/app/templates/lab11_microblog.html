@@ -118,6 +118,8 @@ var emailP = $("#email").val();
 
       console.log(timeUp)
       var profileuser="";
+      var edit ="";
+      var remove="";
       var editE = "";
       var editN = "";
       for(let i = 0; i<data_user.length;i++){
@@ -125,6 +127,8 @@ var emailP = $("#email").val();
           profileuser = data_user[i].avatar_url;
           editE = data_user[i].email;
           editN = data_user[i].name;
+          email = data_user[i].email;
+          // remove = data_user[i].email;s
           break;
         }
       }
