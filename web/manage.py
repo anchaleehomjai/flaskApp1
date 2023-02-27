@@ -4,6 +4,8 @@ from app import app, db
 from app.models.contact import Contact
 from app.models.blogentry import BlogEntry
 from app.models.authuser import AuthUser, PrivateContact
+from app.models.lab13db import PrivateContact_lab13
+
 
 cli = FlaskGroup(app)
 
@@ -21,7 +23,7 @@ def seed_db():
     db.session.add(
         Contact(firstname='สมชาย', lastname='ทรงแบด', phone='081-111-1111'))
     db.session.add(
-        BlogEntry(name='สมหมาย',message='สวัสดีค่ะฉันสมศรี',email='sumsri@gmail.com',avatar_url='https://ui-avatars.com/api/?name=สมหมาย&background=83ee03&color=fff')) 
+        PrivateContact_lab13(name='สมหมาย',message='สวัสดีค่ะฉันสมศรี',email='sumsri@gmail.com',avatar_url='https://ui-avatars.com/api/?name=สมหมาย&background=83ee03&color=fff',owner_id=1)) 
     db.session.add(
        PrivateContact(firstname='ส้มโอ', lastname='โอเค',phone='081-111-1112', owner_id=1))
     db.session.commit()

@@ -11,7 +11,7 @@ from app.models.contact import Contact
 from app.models.blogentry import BlogEntry
 from app import login_manager
 from app.models.authuser import AuthUser, PrivateContact
-from app.models.lab13db import AuthUser_lab13,PrivateContact_lab13
+from app.models.lab13db import AuthUser,PrivateContact_lab13
 
 
 # @login_manager.user_loader
@@ -23,7 +23,7 @@ from app.models.lab13db import AuthUser_lab13,PrivateContact_lab13
 def load_user(user_id):
     # since the user_id is just the primary key of our
     # user table, use it in the query for the user
-    return AuthUser_lab13.query.get(int(user_id))
+    return AuthUser.query.get(int(user_id))
 
 @app.route('/')
 def home():
@@ -364,7 +364,7 @@ def lab13_login():
         remember = bool(request.form.get('remember'))
 
 
-        user = AuthUser_lab13.query.filter_by(email=email).first()
+        user = AuthUser.query.filter_by(email=email).first()
  
         # check if the user actually exists
         # take the user-supplied password, hash it, and compare it to the
@@ -420,7 +420,7 @@ def lab13_signup():
             name = validated_dict['name']
             password = validated_dict['password']
             # if this returns a user, then the email already exists in database
-            user = AuthUser_lab13.query.filter_by(email=email).first()
+            user = AuthUser.query.filter_by(email=email).first()
 
 
             if user:
@@ -434,7 +434,7 @@ def lab13_signup():
             # the plaintext version isn't saved.
             app.logger.debug("preparing to add")
             avatar_url = gen_avatar_url(email, name)
-            new_user = AuthUser_lab13(email=email, name=name,
+            new_user = AuthUser(email=email, name=name,
                                 password=generate_password_hash(
                                     password, method='sha256'),
                                 avatar_url=avatar_url)
@@ -470,3 +470,75 @@ def gen_avatar_url(email, name):
 def lab13_logout():
     logout_user()
     return redirect(url_for('lab13_index'))
+
+
+@app.route('/lab11/user')
+def lab11_db_user():
+    blogEntrys = []
+    db_blogentry = AuthUser.query.all()
+    blogEntrys = list(map(lambda x: x.to_dict(), db_blogentry))
+    return jsonify(blogEntrys)
+
+
+@app.route('/lab13/edit', methods=('GET', 'POST'))
+@login_required
+def lab13_edit():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+
+        validated = True
+        validated_dict = {}
+        valid_keys = ['email', 'name', 'password']
+        # app.logger.debug('hello')
+        # validate the input
+        for key in result:
+            app.logger.debug(str(key)+": " + str(result[key]))
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+            # code to validate and add user to database goes here
+        app.logger.debug("validation done")
+        if validated:
+            # app.logger.debug('hello555555')
+            app.logger.debug(current_user.id)
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            email = validated_dict['email']
+            name = validated_dict['name']
+            password = validated_dict['password']
+
+            auth_users = AuthUser.query.get(current_user.id)
+            validated_dict['password'] = generate_password_hash(password, method='sha256')
+            avatar_url = gen_avatar_url(email, name)
+            validated_dict['avatar_url'] = avatar_url
+            auth_users.update(**validated_dict)
+            db.session.commit()
+            app.logger.debug('validated dict: ' + str(AuthUser.query.get(current_user.id)))
+           
+            next_page = url_for('lab11_blogEntry')
+        return redirect(next_page)
+    
+    return render_template('lab13/edit.html')
+
+
+
+@app.route('/lab13/edit2', methods=('GET', 'POST'))
+@login_required
+def lab13_edit2():
+    if request.method == 'POST':
+        password = request.form.get('password')
+
+        if not check_password_hash(current_user.password, password):
+            flash(' ')
+            return render_template('lab13/edit2.html')
+
+        return redirect(url_for('lab13_edit'))
+    return render_template('lab13/edit2.html')
+

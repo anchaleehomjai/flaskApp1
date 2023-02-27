@@ -4,7 +4,7 @@ from sqlalchemy_serializer import SerializerMixin
 from app import db
 from .blogentry import BlogEntry
 
-class AuthUser_lab13(db.Model, UserMixin):
+class AuthUser(db.Model, UserMixin,SerializerMixin):
     __tablename__ = "auth_users_lab13"
     # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +14,12 @@ class AuthUser_lab13(db.Model, UserMixin):
     avatar_url = db.Column(db.String(100))
 
     def __init__(self, email, name, password, avatar_url):
+        self.email = email
+        self.name = name
+        self.password = password
+        self.avatar_url = avatar_url
+
+    def update(self, email, name, password, avatar_url):
         self.email = email
         self.name = name
         self.password = password
