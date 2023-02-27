@@ -11,7 +11,7 @@ from app.models.contact import Contact
 from app.models.blogentry import BlogEntry
 from app import login_manager
 from app.models.authuser import AuthUser, PrivateContact
-from app.models.lab13db import AuthUser,PrivateContact_lab13
+from app.models.lab13db import AuthUser, PrivateContact_lab13
 
 
 # @login_manager.user_loader
@@ -24,6 +24,7 @@ def load_user(user_id):
     # since the user_id is just the primary key of our
     # user table, use it in the query for the user
     return AuthUser.query.get(int(user_id))
+
 
 @app.route('/')
 def home():
@@ -50,7 +51,6 @@ def db_connection():
 #     return render_template('lab11_microblog.html')
 
 
-
 # @app.route("/lab10")
 # def lab10():
 #     return app.send_static_file('lab10_phonebook.html')
@@ -63,7 +63,6 @@ def lab10_db_contacts():
         PrivateContact.owner_id == current_user.id)
     contacts = list(map(lambda x: x.to_dict(), db_contacts))
     app.logger.debug("DB Contacts: " + str(contacts))
-
 
     return jsonify(contacts)
 
@@ -78,7 +77,6 @@ def lab10_phonebook():
         validated_dict = dict()
         valid_keys = ['firstname', 'lastname', 'phone']
 
-
         # validate the input
         for key in result:
             app.logger.debug(key, result[key])
@@ -86,13 +84,11 @@ def lab10_phonebook():
             if key not in valid_keys:
                 continue
 
-
             value = result[key].strip()
             if not value or value == 'undefined':
                 validated = False
                 break
             validated_dict[key] = value
-
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
@@ -110,12 +106,11 @@ def lab10_phonebook():
                 if contact.owner_id == current_user.id:
                     contact.update(**validated_dict)
 
-
             db.session.commit()
-
 
         return lab10_db_contacts()
     return render_template('lab10_phonebook.html')
+
 
 @app.route('/lab10/remove_contact', methods=('GET', 'POST'))
 def lab10_remove_contacts():
@@ -132,17 +127,16 @@ def lab10_remove_contacts():
             raise
     return lab10_db_contacts()
 
+
 @app.route("/lab11/blogEntry")
 def blog_entries():
     blogEntry = []
     # db_blogEntry = BlogEntry.query.all()
     db_blogEntry = PrivateContact_lab13.query.filter()
 
-
     blogEntry = list(map(lambda x: x.to_dict(), db_blogEntry))
-    blogEntry.sort(key = lambda x:x['id'])
+    blogEntry.sort(key=lambda x: x['id'])
     app.logger.debug("DB BlogEntry: " + str(blogEntry))
-
 
     return jsonify(blogEntry)
 
@@ -155,8 +149,7 @@ def lab11_blogEntry():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email','avatar_url']
-
+        valid_keys = ['name', 'message', 'email', 'avatar_url']
 
         # validate the input
         for key in result:
@@ -165,13 +158,11 @@ def lab11_blogEntry():
             if key not in valid_keys:
                 continue
 
-
             value = result[key].strip()
             if not value or value == 'undefined':
                 validated = False
                 break
             validated_dict[key] = value
-
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
@@ -189,15 +180,10 @@ def lab11_blogEntry():
                 if contact.owner_id == current_user.id:
                     contact.update(**validated_dict)
 
-
             db.session.commit()
-
 
         return blog_entries()
     return render_template('lab11_microblog.html')
-
-
-
 
 
 @app.route('/lab11/remove_contact', methods=('GET', 'POST'))
@@ -236,7 +222,7 @@ def lab11_remove_contacts():
 
 
 #         user = AuthUser.query.filter_by(email=email).first()
- 
+
 #         # check if the user actually exists
 #         # take the user-supplied password, hash it, and compare it to the
 #         # hashed password in the database
@@ -253,7 +239,7 @@ def lab11_remove_contacts():
 #         if not next_page or url_parse(next_page).netloc != '':
 #             next_page = url_for('lab12_profile')
 #         return redirect(next_page)
-    
+
 
 #     return render_template('lab12/login.html')
 
@@ -264,7 +250,7 @@ def lab11_remove_contacts():
 #     if request.method == 'POST':
 #         result = request.form.to_dict()
 #         app.logger.debug(str(result))
- 
+
 #         validated = True
 #         validated_dict = {}
 #         valid_keys = ['email', 'name', 'password']
@@ -318,8 +304,6 @@ def lab11_remove_contacts():
 #     return render_template('lab12/signup.html')
 
 
-
-
 # def gen_avatar_url(email, name):
 #     bgcolor = generate_password_hash(email, method='sha256')[-6:]
 #     color = hex(int('0xffffff', 0) -
@@ -347,13 +331,15 @@ def lab11_remove_contacts():
 
 @app.route('/lab13')
 def lab13_index():
-#    return 'Lab13'
+    #    return 'Lab13'
     return render_template('lab11_microblog.html')
+
 
 @app.route('/lab13/profile')
 @login_required
 def lab13_profile():
     return render_template('lab11_microblog.html')
+
 
 @app.route('/lab13/login', methods=('GET', 'POST'))
 def lab13_login():
@@ -363,9 +349,8 @@ def lab13_login():
         password = request.form.get('password')
         remember = bool(request.form.get('remember'))
 
-
         user = AuthUser.query.filter_by(email=email).first()
- 
+
         # check if the user actually exists
         # take the user-supplied password, hash it, and compare it to the
         # hashed password in the database
@@ -374,7 +359,6 @@ def lab13_login():
             # if the user doesn't exist or password is wrong, reload the page
             return redirect(url_for('lab13_login'))
 
-
         # if the above check passes, then we know the user has the right
         # credentials
         login_user(user, remember=remember)
@@ -382,22 +366,20 @@ def lab13_login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('lab11_blogEntry')
         return redirect(next_page)
-    
 
     return render_template('lab13/login.html')
+
 
 @app.route('/lab13/signup', methods=('GET', 'POST'))
 def lab13_signup():
 
-
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
- 
+
         validated = True
         validated_dict = {}
         valid_keys = ['email', 'name', 'password']
-
 
         # validate the input
         for key in result:
@@ -405,7 +387,6 @@ def lab13_signup():
             # screen of unrelated inputs
             if key not in valid_keys:
                 continue
-
 
             value = result[key].strip()
             if not value or value == 'undefined':
@@ -422,13 +403,11 @@ def lab13_signup():
             # if this returns a user, then the email already exists in database
             user = AuthUser.query.filter_by(email=email).first()
 
-
             if user:
                 # if a user is found, we want to redirect back to signup
                 # page so user can try again
                 flash('Email address already exists')
                 return redirect(url_for('lab13_signup'))
-
 
             # create a new user with the form data. Hash the password so
             # the plaintext version isn't saved.
@@ -442,11 +421,8 @@ def lab13_signup():
             db.session.add(new_user)
             db.session.commit()
 
-
         return redirect(url_for('lab13_login'))
     return render_template('lab13/signup.html')
-
-
 
 
 def gen_avatar_url(email, name):
@@ -459,11 +435,11 @@ def gen_avatar_url(email, name):
     if len(temp) > 1:
         lname = temp[1][0]
 
-
     avatar_url = "https://ui-avatars.com/api/?name=" + \
         fname + "+" + lname + "&background=" + \
         bgcolor + "&color=" + color
     return avatar_url
+
 
 @app.route('/lab13/logout')
 @login_required
@@ -498,7 +474,6 @@ def lab13_edit():
             if key not in valid_keys:
                 continue
 
-
             value = result[key].strip()
             if not value or value == 'undefined':
                 validated = False
@@ -515,18 +490,19 @@ def lab13_edit():
             password = validated_dict['password']
 
             auth_users = AuthUser.query.get(current_user.id)
-            validated_dict['password'] = generate_password_hash(password, method='sha256')
+            validated_dict['password'] = generate_password_hash(
+                password, method='sha256')
             avatar_url = gen_avatar_url(email, name)
             validated_dict['avatar_url'] = avatar_url
             auth_users.update(**validated_dict)
             db.session.commit()
-            app.logger.debug('validated dict: ' + str(AuthUser.query.get(current_user.id)))
-           
+            app.logger.debug('validated dict: ' +
+                             str(AuthUser.query.get(current_user.id)))
+
             next_page = url_for('lab11_blogEntry')
         return redirect(next_page)
-    
-    return render_template('lab13/edit.html')
 
+    return render_template('lab13/edit.html')
 
 
 @app.route('/lab13/edit2', methods=('GET', 'POST'))
@@ -541,4 +517,3 @@ def lab13_edit2():
 
         return redirect(url_for('lab13_edit'))
     return render_template('lab13/edit2.html')
-
