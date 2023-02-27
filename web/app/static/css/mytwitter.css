@@ -1,8 +1,8 @@
 body {
-    background-color: #e7ecf0;
+    background-color: #AA706A;
 }
 nav {
-    background-color: #82cff6;
+    background-color: #F2D6CA;
     border-bottom: 1px solid #adb1b4;
     margin-bottom: 10px;
 }
@@ -21,12 +21,20 @@ img.tw-user-medium {
     border-radius: 20px;
     background-color: #ffffff
 }
+input[type=button],
+#logout{
+    margin-top: 10px;
+    margin-left: 50px;
+    border-radius: 20px;
+    background-color: #8C0303;
+    color: #ffffff;  
+}
 input[type=submit],
 #nav-tweet-btn {
     margin-top: 10px;
     margin-left: 50px;
     border-radius: 20px;
-    background-color: #14649d;
+    background-color: #024959;
     color: #ffffff;
 }
 input[type=submit], input[type=reset], button {
@@ -89,7 +97,8 @@ input[type=submit], input[type=reset], button {
 
 .btn-default{
     color: rgb(19, 19, 18);
-    background-color: rgb(255, 232, 21);
+    background-color: #BF5B04;
+    color: #ffffff;
 }
 
 .oi {

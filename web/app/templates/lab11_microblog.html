@@ -32,7 +32,7 @@
       <form class="form-inline">
         <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
         <img class="tw-user-small rounded-circle" src="{{current_user.avatar_url}}"> &nbsp;
-        <button class="btn" id="nav-tweet-btn" type="submit">Tweet</button>
+        <button id="login" type="button" class="button is-block is-info is-large is-fullwidth">Login</button>
         <button id="logout" type="button">Logout</button>
 
       </form>
@@ -60,7 +60,7 @@
                   <input id="message" class="form-control" type="text" name="message" placeholder="What is happening?">
                   <input type="hidden" id="entryid" name="id" value="">
 
-                  <input class="btn" type="submit" id="nav-tweet-btn" name="submit" value="Tweet" style="margin-right: 20px;">
+                  <input class="btn" type="submit" id="nav-tweet-btn" name="submit" value="Tweet" style="margin-right: 20px;" >
 
                   <!-- <button class="btn" id="nav-tweet-btn" type="submit">Tweet</button> -->
                   <button class="btn" id="nav-tweet-btn" type="button" onclick="clearForm()">Clear</button style="margin-right: 20px;">
@@ -255,6 +255,14 @@
       refresh_table(id);
     });
   }
+  // function plsLogin(id) {
+  //   var contact = PrivateContact_lab13.query.get(id_)
+  //   var con = contact.owner_id == current_user.id
+  //   if(!con("Ples Login!")){
+  //   }
+  //   }
+ 
+
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -262,6 +270,10 @@
   $("#logout").click(function () {
             clearForm();
             window.location.href = "lab13/logout";
+        });
+  $("#login").click(function () {
+            clearForm();
+            window.location.href = "lab13/login";
         });
 </script>
 
