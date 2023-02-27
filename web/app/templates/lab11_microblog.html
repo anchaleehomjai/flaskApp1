@@ -32,8 +32,24 @@
       <form class="form-inline">
         <input class="form-control" id="nav-search" type="search" placeholder="Search Twitter"> &nbsp;
         <img class="tw-user-small rounded-circle" src="{{current_user.avatar_url}}"> &nbsp;
-        <button id="login" type="button" class="button is-block is-info is-large is-fullwidth">Login</button>
-        <button id="logout" type="button">Logout</button>
+        <!-- <button id="login" type="button" class="button is-block is-info is-large is-fullwidth">Login</button>
+        <button id="logout" type="button">Logout</button> -->
+
+        {% if not current_user.is_authenticated %}
+        <button href="{{ url_for('lab13_login') }}" id="login" type="button" class="button is-block is-info is-large is-fullwidth">Login</button>
+        <!-- <button  href="{{ url_for('lab13_signup') }}" id="signup" type="button"> Sign Up</button> -->
+        <a href="{{ url_for('lab13_signup') }}" class="navbar-item">
+          <button   id="signup" type="button"> Sign Up</button>
+        </a>
+        <style>
+          .new-tweet-row {
+              display: none;
+          }
+      </style>
+        {% else %}
+        <button  href="{{ url_for('lab13_logout') }}" id="logout" type="button">Logout</button>
+        
+        {% endif %}
 
       </form>
     </div>
@@ -54,56 +70,26 @@
               </div>
               <div class="col-md-9">
                 <form id="tweet">
-
-                  <input id="name" class="form-control" type="text" name="name" placeholder="What is your name?">
-                  <input id="email" class="form-control" type="email" name="email" placeholder="Email?">
+                  
+                  <input id="name" value="{{current_user.name}}" class="form-control" type="text" name="name" placeholder="What is your name?" hidden="hidden">
+                  <input id="email" value="{{current_user.email}}" class="form-control" type="email" name="email" placeholder="Email?" hidden="hidden">
                   <input id="message" class="form-control" type="text" name="message" placeholder="What is happening?">
                   <input type="hidden" id="entryid" name="id" value="">
+                  <input type="hidden" id="avatar_url" name="avatar_url" value="{{current_user.avatar_url}}">
+
 
                   <input class="btn" type="submit" id="nav-tweet-btn" name="submit" value="Tweet" style="margin-right: 20px;" >
 
                   <!-- <button class="btn" id="nav-tweet-btn" type="submit">Tweet</button> -->
                   <button class="btn" id="nav-tweet-btn" type="button" onclick="clearForm()">Clear</button style="margin-right: 20px;">
-                 
+ 
 
 
                 </form>
               </div>
             </div>
           </div>
-          <!-- <div class="tweet">
-            <div class="row">
-              <div class="col-md-2 text-center">
-                <img class="tw-user-medium rounded-circle" src="static/img/Png.png">
-              </div>
-              <div class="col-md-10">
-                <div class="row tweet-info">
-                  <div class="col-md-auto">
-                    <span class="tweet-username">Hamster News</span>
-                    <span class="tweet-usertag text-muted">@hamsternews</span>-
-                    <span class="tweet-age text-muted">1d</span>
-                  </div>
-                  <div class="col tweet-arrow text-muted">
-                    <span class="oi oi-arrow-thick-bottom float-right"></span>
-                  </div>
-                </div>
-                <div class="tweet-text">
-                  Have a good day !!!!!!!
-                </div>
-                <div class="tweet-media">
-                  <img class="img-fluid rounded" src="static/img/istockphoto-649503474-612x612.jpg">
-                </div>
-                <div class="row text-muted">
-                  <div class="col-md-2"><span class="oi oi-bullhorn"></span></div>
-                  <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
-                  <div class="col-md-2"><span class="oi oi-heart"></span></div>
-                  <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
 
-
-                </div>
-              </div>
-            </div>
-          </div> -->
           <div id="blog-tweet"></div>
 
         </div>
@@ -116,14 +102,20 @@
 </body>
 <script>
 
-
+var emailP = $("#email").val();
   function populate_container(contact_data) {
 
     const data = { "data": contact_data }
 
-    const Createblog = ({ email, id, message, name, date_created, date_updated }) => {
+    const Createblog = ({ email, id, message, name, date_created, date_updated, avatar_url }) => {
       const timeCre = new Date(date_created + " UTC").toLocaleString("en-GB")
       const timeUp = new Date(date_updated + " UTC").toLocaleString("en-GB")
+      // let edit = ' <button type="button" class="btn btn-default btn-sm float-right" value = "${id}"  onclick="prePopulateForm(this.value),scrollToTop()" <span class="glyphicon glyphicon-pencil " ></span>edit </button>'
+      // let remove = '<button  type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>'
+  
+                    
+      
+
       console.log(timeUp)
       // const db_datetime = new Date(date_updated + " UTC").toLocaleString("en-GB")
       return `
@@ -131,7 +123,7 @@
             <div class="row">
 
               <div class="col-md-2 text-center">
-                <img class="tw-user-medium rounded-circle" src="static/img/Png.png">
+                <img class="tw-user-medium rounded-circle" src="${avatar_url}">
               </div>
               <div class="col-md-10">
                 <div class="row tweet-info">
@@ -141,9 +133,13 @@
                   
                   </div>
                   <div class="col tweet-arrow text-muted">
-                    
-                    <button type="button" class="btn btn-default btn-sm float-right" value = "${id}"  onclick="prePopulateForm(this.value),scrollToTop()" <span class="glyphicon glyphicon-pencil " ></span>edit </button>
+                    ${email === "{{current_user.email}}"?
+                      `<button type="button" class="btn btn-default btn-sm float-right" value = "${id}"  onclick="prePopulateForm(this.value),scrollToTop()" <span class="glyphicon glyphicon-pencil " ></span>edit </button>`
 
+                    :
+                    `<button type="button" class="btn btn-default btn-sm float-right"  hidden = "hidden" onclick="prePopulateForm(${id}),scrollToTop()"  > edit </button>`
+                    }
+              
                   </div>
                 </div>
                 <div class="tweet-text" id ="${id}message">${message}</div>
@@ -160,8 +156,13 @@
                   <div class="col-md-2"><span class="oi oi-loop-circular"></span></div>
                   <div class="col-md-2"><span class="oi oi-heart"></span></div>
                   <div class="col-md-2"><span class="oi oi-envelope-open"></span></div>
-                  <button  type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>
-                </div>
+                  ${email === "{{current_user.email}}"?
+                  '<button  type="button" class="oi oi-trash float-right" value = "${id}" onclick="removeItem(this.value)"></button>'
+
+                    :
+                    '<button  type="button" class="oi oi-trash float-right" value = "${id}" hidden = "hidden"   onclick="removeItem(this.value)"></button>'
+                    }
+                  </div>
                
               </div>
             </div>
@@ -215,7 +216,7 @@
 
     var $form = $(this);
     var url = $form.attr("action");
-
+    console.table(formData);
 
     // make a POST call to the back end w/ a callback to refresh the table
     $.post(url, formData, function (contact_data) {
@@ -240,7 +241,7 @@
     $('#email').val(document.getElementById(id + "email").innerHTML);
     $('#name').val(document.getElementById(id + 'name').innerHTML);
     $('#message').val(document.getElementById(id + 'message').innerHTML);
-
+    
     $('#entryid').val(id);
 
   }
@@ -266,6 +267,7 @@
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
 
   $("#logout").click(function () {
             clearForm();

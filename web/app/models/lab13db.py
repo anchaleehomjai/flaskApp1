@@ -22,6 +22,6 @@ class AuthUser_lab13(db.Model, UserMixin):
 class PrivateContact_lab13(BlogEntry, UserMixin, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('auth_users_lab13.id'))
 
-    def __init__(self, name,message,email,owner_id):
-        super().__init__(name,message,email)
+    def __init__(self, name,message,email,owner_id,avatar_url):
+        super().__init__(name,message,email,avatar_url)
         self.owner_id = owner_id

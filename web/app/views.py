@@ -155,7 +155,7 @@ def lab11_blogEntry():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email']
+        valid_keys = ['name', 'message', 'email','avatar_url']
 
 
         # validate the input

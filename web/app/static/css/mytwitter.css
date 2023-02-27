@@ -22,7 +22,7 @@ img.tw-user-medium {
     background-color: #ffffff
 }
 input[type=button],
-#logout{
+#logout,#login,#signup{
     margin-top: 10px;
     margin-left: 50px;
     border-radius: 20px;
