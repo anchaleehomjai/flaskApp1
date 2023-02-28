@@ -338,7 +338,7 @@ def lab13_index():
 @app.route('/lab13/profile')
 @login_required
 def lab13_profile():
-    return render_template('lab11_microblog.html')
+    return render_template('Lab13/profile.html')
 
 
 @app.route('/lab13/login', methods=('GET', 'POST'))
