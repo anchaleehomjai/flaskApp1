@@ -332,7 +332,7 @@ def lab11_remove_contacts():
 @app.route('/lab13')
 def lab13_index():
     #    return 'Lab13'
-    return render_template('lab11_microblog.html')
+    return lab11_blogEntry()
 
 
 @app.route('/lab13/profile')
