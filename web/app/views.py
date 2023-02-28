@@ -113,6 +113,7 @@ def lab10_phonebook():
 
 
 @app.route('/lab10/remove_contact', methods=('GET', 'POST'))
+@login_required
 def lab10_remove_contacts():
     app.logger.debug("LAB10 - REMOVE")
     if request.method == 'POST':
