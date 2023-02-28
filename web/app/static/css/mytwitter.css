@@ -27,12 +27,18 @@ img.tw-user-medium {
 input[type=button],
 #logout,
 #login,
-#signup,
-#profile {
+#signup {
     margin-top: 10px;
     margin-left: 50px;
     border-radius: 20px;
     background-color: #8C0303;
+    color: #ffffff;
+}
+#profile {
+    margin-top: 10px;
+    margin-left: 50px;
+    border-radius: 20px;
+    background-color: #144aa7;
     color: #ffffff;
 }
 
